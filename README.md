@@ -1,113 +1,112 @@
-# ShakeUnlockApp
+## 📄 README.md (SongoGame)
 
-Application React Native qui se déverrouille par **secousses** (seuil dynamique selon le jour de la semaine) ou par **empreinte digitale**.
+
+# SongoGame
+
+Jeu de société traditionnel (Songo) sur mobile – React Native CLI.  
+Deux joueurs, plateau 2×7 cases, semailles, prises, règles de solidarité.
 
 ---
 
 ## 🚀 Installation et premier lancement
 
 ```bash
-# 1. Cloner le dépôt
-git clone https://github.com/ton-compte/ShakeUnlockApp.git
-cd ShakeUnlockApp
-
-# 2. Installer les dépendances
+git clone https://github.com/ton-compte/SongoGame.git
+cd SongoGame
 npm install
-
-# 3. Lancer Metro (dans un terminal)
 npx react-native start --reset-cache
+```
 
-# 4. Dans un autre terminal, lancer l'app
+**Second terminal :**
+```bash
 npx react-native run-android
 ```
 
-> Sur un vrai appareil Android (USB) : exécute `adb reverse tcp:8081 tcp:8081` avant `run-android`
+> Appareil USB : `adb reverse tcp:8081 tcp:8081` avant `run-android`
 
 ---
 
 ## 📁 Structure et rôle des modules
 
-Le projet est découpé en **5 modules indépendants** qui communiquent via un contrat (`src/shared/interfaces.js`).  
-Chaque module est développé sur sa propre branche.
+### 🧠 `gameEngine`
+**Rôle** : Logique métier complète du Songo.  
+**Apport** : Contient l'état du plateau (2×7 cases, nombre de graines par case), les règles de distribution, les prises (chaîne), la solidarité, les interdits, et la détection de fin de partie.  
+**Exporte** : `getBoard()`, `getScores()`, `playMove(player, houseIndex)`, `isValidMove()`, `isGameOver()`, `getWinner()`
 
-### 🔐 `lockManager`
-**Rôle** : Cœur de l'application. Gère l'état global (verrouillé / déverrouillé).  
-**Apport** : Tous les autres modules lisent ou modifient cet état. C'est lui qui décide si l'écran verrouillé ou déverrouillé s'affiche.  
-**Exporte** : `useLock()` (hook avec `isLocked`, `lock()`, `unlock()`)
+### 🎨 `board`
+**Rôle** : Affichage du plateau de jeu.  
+**Apport** : Rend visible les 14 cases (2 lignes × 7 colonnes) avec le nombre de graines dans chacune. Met en évidence le joueur courant. Permet de cliquer sur une case pour jouer un coup.  
+**Exporte** : `BoardComponent` (reçoit `board`, `currentPlayer`, `onHousePress`)
 
-### 📳 `shakeDetector`
-**Rôle** : Détecte les secousses du téléphone et calcule le seuil requis selon le jour de la semaine.  
-**Apport** : Permet de déverrouiller l'app sans toucher l'écran. Quand le nombre de secousses atteint le seuil, il demande à `lockManager` de déverrouiller.  
-**Exporte** : `startListening()`, `stopListening()`
+### 🔄 `turnManager`
+**Rôle** : Gère l'alternance des joueurs et valide les coups avant exécution.  
+**Apport** : S'assure qu'un joueur ne joue pas deux fois de suite, vérifie que la case choisie appartient bien au joueur courant, et appelle `gameEngine` pour exécuter le coup.  
+**Exporte** : `getCurrentPlayer()`, `switchTurn()`, `validateAndExecuteMove(houseIndex)`
 
-### 👆 `fingerprintScanner`
-**Rôle** : Interface avec le capteur d'empreinte digitale du téléphone.  
-**Apport** : Offre une seconde méthode de déverrouillage, plus classique et sécurisée. En cas de succès, il demande à `lockManager` de déverrouiller.  
-**Exporte** : `scan()` (retourne une promesse), `isAvailable()`
+### 📊 `scoreDisplay`
+**Rôle** : Affiche les scores des deux joueurs.  
+**Apport** : Donne une visibilité immédiate sur les graines collectées. Se met à jour après chaque coup.  
+**Exporte** : `ScoreComponent` (reçoit `scores`)
 
-### 🎨 `ui`
-**Rôle** : Affiche l'interface utilisateur (écran verrouillé / déverrouillé).  
-**Apport** : Rend l'app visible et interactive. Il affiche l'état fourni par `lockManager` et expose le bouton "Reverrouiller". Il ne contient **pas** la logique de déverrouillage.  
-**Exporte** : `LockedScreen`, `UnlockedScreen`, `LockButton`
-
-### 🔗 `integration` (toi, lead)
-**Rôle** : Assemble tous les modules dans `App.js`.  
-**Apport** : C'est le chef d'orchestre. Il branche les détecteurs pour qu'ils appellent `unlock()`, connecte l'UI à `useLock()`, et fait en sorte que le bouton "Reverrouiller" appelle `lock()`.  
-**Exporte** : Rien de spécifique — c'est le point d'entrée final.
+### 🔗 `integration` (lead)
+**Rôle** : Assemble tous les modules dans l'écran principal.  
+**Apport** : Branche `BoardComponent` avec `turnManager`, connecte `ScoreComponent` à `gameEngine`, et gère l'état global de la partie (en cours / terminée).  
+**Exporte** : Rien – c'est le point d'entrée final (`App.js`)
 
 ---
 
-## 🌿 Branches associées
+## 🌿 Branches
 
 | Module | Branche |
 |--------|---------|
-| `lockManager` | `feat/lock-manager` |
-| `shakeDetector` | `feat/shake-detector` |
-| `fingerprintScanner` | `feat/fingerprint` |
-| `ui` | `feat/ui` |
+| `gameEngine` | `feat/game-engine` |
+| `board` | `feat/board` |
+| `turnManager` | `feat/turn-manager` |
+| `scoreDisplay` | `feat/score-display` |
 | `integration` | `feat/integration` |
 
 ```bash
-git checkout feat/nom-de-votre-module
+git checkout feat/votre-module
 ```
 
 ---
 
-## 🧪 Tester son module indépendamment
+## 🧪 Tester son module seul
 
-Chacun peut tester son module seul grâce aux mocks.
+Créer un mock dans `src/mocks/` pour simuler un autre module.
 
-**Exemple** : le module `ui` peut créer `src/mocks/mockLockManager.js` qui simule `useLock()` sans avoir besoin du vrai `lockManager`.
+Exemple pour `board` qui a besoin de `gameEngine` :
 
 ```javascript
-// src/mocks/mockLockManager.js
-export const useMockLock = () => ({
-  isLocked: true,
-  lock: () => console.log('[mock] lock'),
-  unlock: () => console.log('[mock] unlock'),
-});
+// src/mocks/mockGameEngine.js
+export const mockGetBoard = () => [
+  [5,5,5,5,5,5,5], // Sud
+  [5,5,5,5,5,5,5]  // Nord
+];
+export const mockGetCurrentPlayer = () => 0;
 ```
 
-Puis dans son code, il remplace temporairement l'import du vrai module par le mock.
+---
+
+## ⚠️ Règles d'or
+
+1. Ne toucher qu'à `src/modules/son-module/`
+2. Ne pas modifier `src/shared/interfaces.js` sans validation
+3. Commits fréquents sur sa branche
+4. Pas de merge sur `main` sans le lead
 
 ---
 
-## ⚠️ Règles d'or (pour éviter l'enfer à la fusion)
+## 🔧 Dépendances (aucune pour l'instant – jeu 100% logique)
 
-1. **Ne jamais** modifier le dossier d'un autre module.
-2. **Ne jamais** modifier `src/shared/interfaces.js` sans validation du groupe.
-3. **Committer régulièrement** sur sa propre branche.
-4. **Ne pas merger** sur `main` sans accord du lead.
+Aucune librairie externe nécessaire. Tout est en JavaScript pur.
 
 ---
 
-## 🔧 Dépendances principales
+## 📞 Problèmes fréquents
 
-```bash
-npm install react-native-biometrics   # pour fingerprintScanner
-npm install react-native-shake        # pour shakeDetector
-```
-
-Ces librairies nécessitent une configuration spécifique Android/iOS — voir leur documentation officielle.
-
----
+| Problème | Solution |
+|----------|----------|
+| Metro ne démarre pas | `npx react-native start --reset-cache` |
+| `@react-native/metro-config` manquant | `npm install --save-dev @react-native/metro-config` |
+| L'app plante | `npx react-native log-android` |
