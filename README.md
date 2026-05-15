@@ -25,33 +25,27 @@ npx react-native run-android
 > Appareil USB : `adb reverse tcp:8081 tcp:8081` avant `run-android`
 
 ---
-
 ## 📁 Structure et rôle des modules
 
 ### 🧠 `gameEngine`
 **Rôle** : Logique métier complète du Songo.  
-**Apport** : Contient l'état du plateau (2×7 cases, nombre de graines par case), les règles de distribution, les prises (chaîne), la solidarité, les interdits, et la détection de fin de partie.  
-**Exporte** : `getBoard()`, `getScores()`, `playMove(player, houseIndex)`, `isValidMove()`, `isGameOver()`, `getWinner()`
+**Exporte** : `getBoard()`, `getScores()`, `playMove()`, `isValidMove()`, `isGameOver()`, `getWinner()`
 
 ### 🎨 `board`
-**Rôle** : Affichage du plateau de jeu.  
-**Apport** : Rend visible les 14 cases (2 lignes × 7 colonnes) avec le nombre de graines dans chacune. Met en évidence le joueur courant. Permet de cliquer sur une case pour jouer un coup.  
-**Exporte** : `BoardComponent` (reçoit `board`, `currentPlayer`, `onHousePress`)
+**Rôle** : Affiche le plateau (2 lignes × 7 cases) avec le nombre de graines par case.  
+**Exporte** : `BoardComponent` (props : `board`, `currentPlayer`, `onHousePress`)
 
 ### 🔄 `turnManager`
-**Rôle** : Gère l'alternance des joueurs et valide les coups avant exécution.  
-**Apport** : S'assure qu'un joueur ne joue pas deux fois de suite, vérifie que la case choisie appartient bien au joueur courant, et appelle `gameEngine` pour exécuter le coup.  
-**Exporte** : `getCurrentPlayer()`, `switchTurn()`, `validateAndExecuteMove(houseIndex)`
+**Rôle** : Gère l'alternance et valide les coups avant exécution.  
+**Exporte** : `getCurrentPlayer()`, `switchTurn()`, `validateAndExecuteMove()`
 
-### 📊 `scoreDisplay`
-**Rôle** : Affiche les scores des deux joueurs.  
-**Apport** : Donne une visibilité immédiate sur les graines collectées. Se met à jour après chaque coup.  
-**Exporte** : `ScoreComponent` (reçoit `scores`)
+### 🖥️ `ui`
+**Rôle** : Affiche les scores, l'écran principal, l'écran de fin de partie, et le bouton "Nouvelle partie".  
+**Exporte** : `MainScreen` (props : `board`, `currentPlayer`, `scores`, `onHousePress`, `gameOver`, `winner`, `onNewGame`)
 
-### 🔗 `integration` (lead)
-**Rôle** : Assemble tous les modules dans l'écran principal.  
-**Apport** : Branche `BoardComponent` avec `turnManager`, connecte `ScoreComponent` à `gameEngine`, et gère l'état global de la partie (en cours / terminée).  
-**Exporte** : Rien – c'est le point d'entrée final (`App.js`)
+### 🔗 `integration`
+**Rôle** : Assemble tous les modules dans `App.js`.  
+**Exporte** : Rien – point d'entrée final.
 
 ---
 
@@ -62,7 +56,7 @@ npx react-native run-android
 | `gameEngine` | `feat/game-engine` |
 | `board` | `feat/board` |
 | `turnManager` | `feat/turn-manager` |
-| `scoreDisplay` | `feat/score-display` |
+| `ui` | `feat/ui` |
 | `integration` | `feat/integration` |
 
 ```bash
