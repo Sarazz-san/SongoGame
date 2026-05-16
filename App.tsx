@@ -1,11 +1,12 @@
 import React from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { RootNavigator } from './src/navigation/RootNavigator';
 
-function App() {
+function App(): React.JSX.Element {
   return (
-    <SafeAreaView>
-    <Text>Hello React Native 🚀</Text>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <RootNavigator />
+    </SafeAreaProvider>
   );
 }
 
