@@ -1,6 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { colors } from '../../theme/colors';
 import { rounded } from '../../theme/spacing';
 import { Text } from '../typography/Text';
@@ -21,16 +20,11 @@ export function PrimaryButton({ title, onPress, disabled, testID }: Props) {
       onPress={onPress}
       style={({ pressed }) => [styles.wrapper, pressed && !disabled ? styles.pressed : null]}
     >
-      <LinearGradient
-        colors={disabled ? ['#3b3331', '#251e1c'] : [colors.tacticalGold, colors.sunsetGlow]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[styles.gradient, disabled && styles.disabled]}
-      >
+      <View style={[styles.gradient, disabled ? styles.disabled : { backgroundColor: colors.tacticalGold }]}>
         <Text variant="tech" color={disabled ? colors.onSurfaceVariant : colors.onPrimary} style={styles.title}>
           {title}
         </Text>
-      </LinearGradient>
+      </View>
     </Pressable>
   );
 }

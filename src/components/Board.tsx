@@ -1,7 +1,5 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { Pit } from './Pit';
 
@@ -39,7 +37,7 @@ export function Board({
 
   return (
     <View style={styles.boardContainer}>
-      <LinearGradient colors={[colors.mahoganyRich, colors.surfaceContainerHigh]} style={styles.boardInner} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
+      <View style={styles.boardInner}>
         <View style={[styles.row, { gap }]}>
           {topRow.map((seeds, i) => {
             const index = showPlayer2OnTop ? 7 + i : i;
@@ -78,7 +76,7 @@ export function Board({
             );
           })}
         </View>
-      </LinearGradient>
+      </View>
     </View>
   );
 }

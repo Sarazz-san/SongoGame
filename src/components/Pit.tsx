@@ -1,6 +1,5 @@
 import React from 'react';
 import { Animated, Easing, Pressable, StyleSheet, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { Text } from './typography/Text';
@@ -71,11 +70,7 @@ export function Pit({ index, seeds, size, disabled, selected, highlight, onPress
       >
         <View style={styles.inner}>
           <View style={styles.innerShadow} pointerEvents="none" />
-          <LinearGradient
-            colors={[ 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.12)' ]}
-            style={styles.gradientOverlay}
-            pointerEvents="none"
-          />
+          <View style={styles.gradientOverlay} pointerEvents="none" />
           <View style={styles.seedWrap} pointerEvents="none">
             {Array.from({ length: renderedSeeds }).map((_, i) => {
               const variant = (Math.floor(rand() * 4) as 0 | 1 | 2 | 3) ?? 0;

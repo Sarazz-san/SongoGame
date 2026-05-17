@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors } from '../theme/colors';
@@ -21,14 +20,14 @@ export function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.heroContainer}>
         <Image source={require('../assets/images/hero.png')} style={styles.hero} resizeMode="cover" />
-        <LinearGradient colors={[ 'rgba(0,0,0,0.45)', 'rgba(0,0,0,0.2)' ]} style={styles.heroOverlay}>
+        <View style={[styles.heroOverlay, styles.heroOverlayBg]}>
           <Text variant="header" style={styles.heroTitle}>
             SONGO
           </Text>
           <Text variant="body" color={colors.onPrimaryContainer}>
             L’Art de la Stratégie Pure
           </Text>
-        </LinearGradient>
+        </View>
       </View>
 
       <View style={styles.card}>
@@ -91,6 +90,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.gutter,
     gap: 4,
+  },
+  heroOverlayBg: {
+    backgroundColor: 'rgba(0,0,0,0.25)'
   },
   heroTitle: {
     ...typography.headlineXl,
