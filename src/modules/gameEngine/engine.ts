@@ -224,7 +224,7 @@ const validateForbidden7Rule = (state: GameState, startIndex: number) => {
   // Interdit 1 (clubawale): forbidden to sow 1 or 2 seeds in opponent territory using your pit 7.
   // Here we interpret "case 7" as the rightmost pit of your camp.
   const player = state.currentPlayer;
-  const [ownStart, ownEnd] = playerTerritoryRange(player);
+  const [_ownStart, ownEnd] = playerTerritoryRange(player);
   const rightmostIndex = ownEnd;
   if (startIndex !== rightmostIndex) return { forbidden: false };
   const seeds = state.board[startIndex];
@@ -249,7 +249,7 @@ export const isValidMove = (state: GameState, startIndex: number) => {
     if (canFeed7) {
       // Ensure chosen move feeds >=7 (precise simulation for this move).
       const simBoard = [...state.board];
-      const { seedsPicked } = applySowing(simBoard, player, startIndex);
+      applySowing(simBoard, player, startIndex);
       // Count opponent seeds gained = opponent total after - before
       const before = territorySeedsTotal(state.board, opponent);
       const after = territorySeedsTotal(simBoard, opponent);

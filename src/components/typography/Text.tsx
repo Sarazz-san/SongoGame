@@ -17,6 +17,7 @@ export function Text({ variant = 'body', color, style, ...props }: Props) {
 const styles = StyleSheet.create({
   base: {
     color: colors.onSurface,
+    fontFamily: typography.bodyMd.fontFamily,
   },
 });
 

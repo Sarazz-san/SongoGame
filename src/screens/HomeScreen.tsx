@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors } from '../theme/colors';
@@ -8,48 +9,56 @@ import { typography } from '../theme/typography';
 import { useGameStore } from '../store/useGameStore';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { Text } from '../components/typography/Text';
-import type { RootStackParamList } from '../navigation/RootNavigator';
+import { RootStackParamList } from '../navigation/types';
 import { StatusChip } from '../components/chips/StatusChip';
 import { haptics } from '../shared/haptics';
 
 export function HomeScreen() {
   const initializeGame = useGameStore((s) => s.initializeGame);
-  const navigation = useNavigation();
-  const rootNavigation = navigation.getParent<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text variant="header">SONGO</Text>
-        <Text variant="body">L’Art de la Stratégie Pure</Text>
+      <View style={styles.heroContainer}>
+        <Image source={require('../assets/images/hero.png')} style={styles.hero} resizeMode="cover" />
+        <LinearGradient colors={[ 'rgba(0,0,0,0.45)', 'rgba(0,0,0,0.2)' ]} style={styles.heroOverlay}>
+          <Text variant="header" style={styles.heroTitle}>
+            SONGO
+          </Text>
+          <Text variant="body" color={colors.onPrimaryContainer}>
+            L’Art de la Stratégie Pure
+          </Text>
+        </LinearGradient>
       </View>
 
       <View style={styles.card}>
         <Text style={styles.cardTitle} variant="header" color={colors.onSurface}>
-          Partie Rapide
+          Démarrer une Partie
         </Text>
-        <Text variant="body">Affrontez l’IA (à venir) ou jouez localement.</Text>
+        <Text variant="body" color={colors.onSurfaceVariant}>
+          Affrontez l’IA en solo ou défiez un ami en mode local sur le même écran.
+        </Text>
         <View style={styles.actions}>
           <PrimaryButton
-            title="SOLO"
+            title="SOLO (IA)"
             onPress={() => {
               haptics.trigger('impactLight');
               initializeGame('SOLO');
-              rootNavigation?.navigate('Game');
+              navigation.navigate('Game');
             }}
           />
           <PrimaryButton
-            title="LOCAL"
+            title="LOCAL (PVP)"
             onPress={() => {
               haptics.trigger('impactLight');
               initializeGame('LOCAL');
-              rootNavigation?.navigate('Game');
+              navigation.navigate('Game');
             }}
           />
         </View>
         <View style={styles.modeRow}>
-          <StatusChip label="Solo: IA random" />
-          <StatusChip label="Local: 2 joueurs" />
+          <StatusChip label="Solo: IA Tactique" />
+          <StatusChip label="Local: Duel" />
         </View>
       </View>
     </View>
@@ -64,8 +73,30 @@ const styles = StyleSheet.create({
     paddingTop: spacing.gutter,
     gap: spacing.gutter,
   },
-  header: {
-    gap: 8,
+  heroContainer: {
+    height: 220,
+    borderRadius: rounded.xl,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
+    backgroundColor: colors.ebonyDeep,
+  },
+  hero: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.6,
+  },
+  heroOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    padding: spacing.gutter,
+    gap: 4,
+  },
+  heroTitle: {
+    ...typography.headlineXl,
+    fontSize: 48,
+    lineHeight: 52,
+    letterSpacing: 4,
   },
   card: {
     backgroundColor: colors.surfaceContainerLow,

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Songo - Tutorial &amp; Rules</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Metropolis:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        body {
+            background-color: #181210;
+            color: #ede0dc;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#690005",
+                        "surface-bright": "#3f3835",
+                        "on-background": "#ede0dc",
+                        "ebony-deep": "#0C0908",
+                        "on-primary-container": "#573900",
+                        "surface-container-high": "#2f2826",
+                        "surface-variant": "#3b3331",
+                        "seed-ivory": "#F0EBE6",
+                        "on-surface-variant": "#d3c4b4",
+                        "on-primary-fixed-variant": "#614003",
+                        "primary-fixed": "#ffddb0",
+                        "secondary-fixed": "#ffdad9",
+                        "on-surface": "#ede0dc",
+                        "surface-dim": "#181210",
+                        "primary-container": "#d0a35f",
+                        "tertiary-container": "#fc8f33",
+                        "tertiary": "#ffb783",
+                        "error": "#ffb4ab",
+                        "surface-container": "#251e1c",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#623d3d",
+                        "background": "#181210",
+                        "on-secondary": "#492727",
+                        "on-tertiary-fixed": "#301400",
+                        "secondary": "#eebab9",
+                        "inverse-surface": "#ede0dc",
+                        "on-secondary-container": "#dfacab",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#9b8f80",
+                        "surface-container-lowest": "#130d0b",
+                        "surface-container-low": "#201a18",
+                        "primary": "#eebf78",
+                        "on-tertiary-container": "#653100",
+                        "inverse-on-surface": "#362f2c",
+                        "inverse-primary": "#7b581b",
+                        "surface": "#181210",
+                        "primary-fixed-dim": "#eebf78",
+                        "surface-container-highest": "#3b3331",
+                        "mahogany-rich": "#3D2424",
+                        "on-primary-fixed": "#281800",
+                        "outline-variant": "#4f4539",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "secondary-container": "#653f3f",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "on-primary": "#442c00",
+                        "tertiary-fixed": "#ffdcc5",
+                        "secondary-fixed-dim": "#eebab9",
+                        "on-tertiary": "#4f2500",
+                        "sunset-glow": "#FF8C42",
+                        "tactical-gold": "#D0A35F",
+                        "surface-tint": "#eebf78",
+                        "on-secondary-fixed": "#301313"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "board-gap": "12px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["EB Garamond"],
+                        "headline-xl": ["EB Garamond"],
+                        "stats-display": ["Metropolis"],
+                        "label-technical": ["JetBrains Mono"],
+                        "body-md": ["Metropolis"],
+                        "headline-lg": ["EB Garamond"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-24">
+<!-- Top App Bar -->
+<header class="bg-ebony-deep border-b border-mahogany-rich shadow-[0_4px_20px_rgba(61,36,36,0.5)] fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16">
+<button class="flex items-center text-tactical-gold hover:text-sunset-glow transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined mr-2">arrow_back</span>
+<span class="font-label-technical text-label-technical uppercase tracking-wider">Back to Menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-tactical-gold uppercase">SONGO</h1>
+<div class="w-10 h-10 rounded-full border border-mahogany-rich flex items-center justify-center bg-surface-container overflow-hidden">
+<span class="material-symbols-outlined text-tactical-gold" data-icon="person">person</span>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile max-w-4xl mx-auto">
+<!-- Intro Header -->
+<div class="mb-12 text-center">
+<h2 class="font-headline-lg text-headline-lg text-tactical-gold mb-2">Tutorial &amp; Rules</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-lg mx-auto">Master the ancient mathematical rhythm of Central African Songo.</p>
+</div>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Section 1: Relais Mechanic -->
+<section class="bg-surface-container rounded-xl border border-mahogany-rich p-6 shadow-xl flex flex-col md:col-span-2">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-mahogany-rich p-3 rounded-lg">
+<span class="material-symbols-outlined text-tactical-gold" data-icon="autorenew">autorenew</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-tactical-gold">Le Relais (Relay)</h3>
+<p class="font-label-technical text-label-technical text-on-surface-variant uppercase tracking-widest">Movement Mechanic</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+<div class="space-y-4">
+<p class="font-body-md text-body-md text-on-surface">The heart of Songo's strategy. When sowing seeds, if your last seed lands in a hole that <span class="text-tactical-gold font-bold">already contains seeds</span>, you don't stop.</p>
+<ul class="space-y-2 font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start gap-2">
+<span class="text-tactical-gold mt-1">•</span>
+<span>Pick up all seeds in that landing hole (including the one you just dropped).</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="text-tactical-gold mt-1">•</span>
+<span>Continue sowing in the same direction.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="text-tactical-gold mt-1">•</span>
+<span>Chain multiple relays to cross the board in a single turn.</span>
+</li>
+</ul>
+</div>
+<!-- Diagram Shell -->
+<div class="bg-ebony-deep p-4 rounded-xl border border-outline-variant relative overflow-hidden">
+<div class="flex justify-around items-center h-32 relative">
+<!-- Visual representation of board pits -->
+<div class="w-16 h-16 rounded-full bg-background border border-mahogany-rich shadow-inner flex items-center justify-center relative">
+<div class="absolute -top-6 font-label-technical text-on-surface-variant text-[10px]">PIT A</div>
+<div class="w-2 h-2 rounded-full bg-seed-ivory absolute top-4 left-4 shadow-sm"></div>
+<div class="w-2 h-2 rounded-full bg-seed-ivory absolute bottom-4 right-5 shadow-sm"></div>
+<div class="w-2 h-2 rounded-full bg-seed-ivory absolute top-6 right-3 shadow-sm"></div>
+</div>
+<div class="material-symbols-outlined text-tactical-gold text-3xl animate-pulse" data-icon="trending_flat">trending_flat</div>
+<div class="w-20 h-20 rounded-full bg-background border-2 border-tactical-gold shadow-[0_0_15px_rgba(208,163,95,0.3)] flex items-center justify-center relative">
+<div class="absolute -top-6 font-label-technical text-tactical-gold text-[10px]">RELAY POINT</div>
+<div class="w-2 h-2 rounded-full bg-seed-ivory absolute top-6 left-6 shadow-sm"></div>
+<div class="w-2 h-2 rounded-full bg-seed-ivory absolute top-4 right-8 shadow-sm"></div>
+<!-- Sowing animation placeholder -->
+<div class="absolute -top-4 -right-4 bg-mahogany-rich text-tactical-gold font-label-technical text-[10px] px-2 py-1 rounded border border-tactical-gold">+1 Seed</div>
+</div>
+</div>
+<div class="mt-4 text-center font-label-technical text-label-technical text-on-tertiary-fixed-variant italic">
+                            Landing on non-empty pits triggers an immediate collection and continuation.
+                        </div>
+</div>
+</div>
+</section>
+<!-- Section 2: Capture Rules -->
+<section class="bg-surface-container rounded-xl border border-mahogany-rich p-6 shadow-xl">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-mahogany-rich p-3 rounded-lg">
+<span class="material-symbols-outlined text-tactical-gold" data-icon="token">token</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-tactical-gold">Capture</h3>
+<p class="font-label-technical text-label-technical text-on-surface-variant uppercase tracking-widest">Scoring Rule</p>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-6">Capture occurs when your sowing ends on the <span class="text-secondary font-bold">opponent's side</span> in a hole that results in a specific count:</p>
+<div class="grid grid-cols-3 gap-2 mb-6">
+<div class="bg-ebony-deep border border-outline-variant p-3 rounded-lg text-center">
+<div class="font-stats-display text-stats-display text-tactical-gold">2</div>
+<div class="font-label-technical text-[10px] text-on-surface-variant uppercase">Seeds</div>
+</div>
+<div class="bg-ebony-deep border border-outline-variant p-3 rounded-lg text-center">
+<div class="font-stats-display text-stats-display text-tactical-gold">3</div>
+<div class="font-label-technical text-[10px] text-on-surface-variant uppercase">Seeds</div>
+</div>
+<div class="bg-ebony-deep border border-outline-variant p-3 rounded-lg text-center">
+<div class="font-stats-display text-stats-display text-tactical-gold">4</div>
+<div class="font-label-technical text-[10px] text-on-surface-variant uppercase">Seeds</div>
+</div>
+</div>
+<div class="bg-mahogany-rich/30 p-4 rounded-lg border-l-4 border-tactical-gold">
+<p class="font-body-md text-body-md italic text-on-surface-variant">
+                        "If the landing hole has 2, 3, or 4 seeds, you capture them. You also capture seeds from preceding holes if they also contain 2, 3, or 4 seeds in an unbroken sequence."
+                    </p>
+</div>
+</section>
+<!-- Section 3: L'Ethique (Grand Slam) -->
+<section class="bg-surface-container rounded-xl border border-mahogany-rich p-6 shadow-xl">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-mahogany-rich p-3 rounded-lg">
+<span class="material-symbols-outlined text-tactical-gold" data-icon="gavel">gavel</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-tactical-gold">L'Éthique</h3>
+<p class="font-label-technical text-label-technical text-on-surface-variant uppercase tracking-widest">Grand Slam Rule</p>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-4">Songo is a game of strategic balance, not extinction.</p>
+<div class="space-y-4">
+<div class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-error" data-icon="block">block</span>
+<div>
+<h4 class="font-label-technical text-label-technical text-tactical-gold uppercase">Never "Starve" the Opponent</h4>
+<p class="font-body-md text-sm text-on-surface-variant">You are forbidden from making a move that leaves the opponent with zero seeds on their side of the board.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-sunset-glow" data-icon="info">info</span>
+<div>
+<h4 class="font-label-technical text-label-technical text-tactical-gold uppercase">The Obligation to Feed</h4>
+<p class="font-body-md text-sm text-on-surface-variant">If your opponent has no seeds, you MUST play a move that brings seeds into their territory if such a move is possible.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Strategy Tip -->
+<div class="mt-12 bg-ebony-deep border-2 border-mahogany-rich rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8">
+<div class="w-full md:w-1/3 aspect-video bg-surface-container rounded-xl overflow-hidden shadow-inner relative group">
+<img alt="Songo Board Detail" class="w-full h-full object-cover opacity-60 mix-blend-luminosity group-hover:opacity-100 transition-opacity" data-alt="A close-up photograph of a handcrafted African Songo board carved from dark, rich mahogany. The pits are deep and concave, with polished ivory-colored seeds resting naturally inside the hollows. Dramatic side lighting highlights the wooden grain and creates deep shadows within the pits, evoking a luxurious and strategic gaming atmosphere. The overall mood is professional and culturally authentic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABmLFG7_WcDefnWYpuMFMgP8_SDuHLUmateaBHJi8qEh1IvsE7_XCfOkdcN1zWE2ofmFp8pjuJOf0otiMS0gnTcfQhlTCWUN9sCWZP9gKbY7brFrY_GfGfO06vTKpBQ2_fS3XYjDngTz9MH43ZgmX0J1S_6pMq6cgLlUVbSrUPMjraqp13DePfnqADLT7EGgU6YsVUxN_0YxnNo-ZJ8INYNLeTo6bOtDz21NDj_rEXEifuWjdJVOwWal-I766b5rUYDu5PIaCUl5il"/>
+<div class="absolute inset-0 bg-gradient-to-t from-ebony-deep to-transparent"></div>
+</div>
+<div class="w-full md:w-2/3">
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile text-tactical-gold mb-2">Grandmaster Tip</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">"In Songo, the winner is often not the one who captures the most seeds early, but the one who manages the flow of the relay to control the board's distribution. Keep your holes 'fertile' with 1-2 seeds to maximize relay potential."</p>
+<div class="flex items-center gap-2">
+<div class="h-1 w-12 bg-tactical-gold rounded-full"></div>
+<span class="font-label-technical text-label-technical uppercase tracking-tighter text-tactical-gold">Ancient Songo Proverb</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-mobile py-2 bg-ebony-deep border-t border-mahogany-rich shadow-[0_-4px_20px_rgba(61,36,36,0.3)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-sunset-glow" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-technical text-label-technical">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-tactical-gold bg-mahogany-rich rounded-xl px-4 py-1 transform scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-technical text-label-technical">Learn</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-sunset-glow" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-label-technical text-label-technical">Rankings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-sunset-glow" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-technical text-label-technical">Profile</span>
+</a>
+</nav>
+</body></html>

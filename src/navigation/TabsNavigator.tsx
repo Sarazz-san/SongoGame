@@ -7,14 +7,11 @@ import { LearnScreen } from '../screens/LearnScreen';
 import { RankingsScreen } from '../screens/RankingsScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 
-export type TabsParamList = {
-  Play: undefined;
-  Learn: undefined;
-  Rankings: undefined;
-  Profile: undefined;
-};
+import { TabsParamList } from './types';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
+
+const TabIcon = () => <View />;
 
 export function TabsNavigator() {
   return (
@@ -31,17 +28,17 @@ export function TabsNavigator() {
         tabBarHideOnKeyboard: true,
       }}
     >
-      <Tab.Screen name="Play" component={HomeScreen} options={{ tabBarLabel: 'Play', tabBarIcon: () => <View /> }} />
-      <Tab.Screen name="Learn" component={LearnScreen} options={{ tabBarLabel: 'Learn', tabBarIcon: () => <View /> }} />
+      <Tab.Screen name="Play" component={HomeScreen} options={{ tabBarLabel: 'Play', tabBarIcon: TabIcon }} />
+      <Tab.Screen name="Learn" component={LearnScreen} options={{ tabBarLabel: 'Learn', tabBarIcon: TabIcon }} />
       <Tab.Screen
         name="Rankings"
         component={RankingsScreen}
-        options={{ tabBarLabel: 'Rankings', tabBarIcon: () => <View /> }}
+        options={{ tabBarLabel: 'Rankings', tabBarIcon: TabIcon }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ tabBarLabel: 'Profile', tabBarIcon: () => <View /> }}
+        options={{ tabBarLabel: 'Profile', tabBarIcon: TabIcon }}
       />
     </Tab.Navigator>
   );

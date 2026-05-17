@@ -12,7 +12,7 @@ L'objectif final de ce plan est de passer d'un dossier vide à un **APK fonction
 - [x] **1.1 Initialisation du projet** : 
   - Création du projet React Native (React Native CLI).
   - Nettoyage des fichiers par défaut.
-- [ ] **1.2 Import des Assets** : 
+- [x] **1.2 Import des Assets** : 
   - Ajout des polices d'écriture (*EB Garamond, Metropolis, JetBrains Mono*).
   - Ajout des images et icônes (Hero banner du menu, icônes des actions, avatars placeholders).
 - [x] **1.3 Configuration du Design System ("Songo Heritage")** :
@@ -115,7 +115,7 @@ L'objectif final de ce plan est de passer d'un dossier vide à un **APK fonction
   - Configuration de l'UI pour jouer à deux sur le même téléphone (rotation du plateau ou informations claires sur à qui le tour).
 - [x] **6.3 Retours Haptiques (Vibrations)** : 
   - Utilisation de `expo-haptics` ou `react-native-haptic-feedback` lors du ramassage et de la pose des graines.
-- [ ] **6.4 Effets Sonores (Audio)** : 
+- [x] **6.4 Effets Sonores (Audio)** : 
   - Utilisation de `expo-av` ou `react-native-sound` pour des bruits de pierres/bois à chaque interaction.
 
 ---
@@ -125,9 +125,9 @@ L'objectif final de ce plan est de passer d'un dossier vide à un **APK fonction
 
 - [x] **7.1 Responsive Design** : 
   - Vérification du rendu sur petits écrans et tablettes (ajustement du gap des cases).
-- [ ] **7.2 Débogage final** : 
+- [x] **7.2 Débogage final** : 
   - Résolution des cas limites du moteur de jeu rencontrés lors du gameplay réel.
-- [ ] **7.3 Nettoyage du Code** : 
+- [x] **7.3 Nettoyage du Code** : 
   - Vérification du linting (ESLint/Prettier), typage strict en TypeScript.
 
 ---

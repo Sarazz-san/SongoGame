@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "npx react-native-asset || npx react-native link"
   },
   "dependencies": {
     "@react-native/new-app-screen": "0.85.2",
@@ -17,8 +18,11 @@
     "react": "19.2.3",
     "react-native": "0.85.2",
     "react-native-haptic-feedback": "^3.0.0",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-safe-area-context": "^5.7.0",
     "react-native-screens": "^4.25.0",
+    "react-native-svg": "^13.14.1",
+    "react-native-vector-icons": "^9.2.0",
     "zustand": "^5.0.13"
   },
   "devDependencies": {

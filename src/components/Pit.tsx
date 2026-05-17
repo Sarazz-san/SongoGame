@@ -1,5 +1,6 @@
 import React from 'react';
 import { Animated, Easing, Pressable, StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { Text } from './typography/Text';
@@ -15,6 +16,7 @@ type Props = {
   onPress?: () => void;
 };
 
+/* eslint-disable no-bitwise */
 const mulberry32 = (a: number) => {
   return () => {
     let t = (a += 0x6d2b79f5);
@@ -23,6 +25,7 @@ const mulberry32 = (a: number) => {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 };
+/* eslint-enable no-bitwise */
 
 export function Pit({ index, seeds, disabled, selected, highlight, onPress }: Props) {
   const renderedSeeds = Math.min(seeds, 12);
@@ -47,7 +50,7 @@ export function Pit({ index, seeds, disabled, selected, highlight, onPress }: Pr
     return () => loop.stop();
   }, [pulse, selected]);
 
-  const scale = selected ? pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 1.035] }) : 1;
+  const scale = selected ? pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 1.05] }) : 1;
   const pitSize = typeof size === 'number' ? size : undefined;
 
   return (
@@ -67,15 +70,21 @@ export function Pit({ index, seeds, disabled, selected, highlight, onPress }: Pr
         ]}
       >
         <View style={styles.inner}>
+          <View style={styles.innerShadow} pointerEvents="none" />
+          <LinearGradient
+            colors={[ 'rgba(0,0,0,0.5)', 'rgba(0,0,0,0.12)' ]}
+            style={styles.gradientOverlay}
+            pointerEvents="none"
+          />
           <View style={styles.seedWrap} pointerEvents="none">
             {Array.from({ length: renderedSeeds }).map((_, i) => {
               const variant = (Math.floor(rand() * 4) as 0 | 1 | 2 | 3) ?? 0;
-              const size = 5 + Math.floor(rand() * 3); // 5..7
-              const jitterX = Math.floor((rand() - 0.5) * 2); // -1..1
-              const jitterY = Math.floor((rand() - 0.5) * 2);
+              const seedSize = 6 + Math.floor(rand() * 3);
+              const jitterX = (rand() - 0.5) * 14;
+              const jitterY = (rand() - 0.5) * 14;
               return (
                 <View key={i} style={{ transform: [{ translateX: jitterX }, { translateY: jitterY }] }}>
-                  <Seed variant={variant} size={size} />
+                  <Seed variant={variant} size={seedSize} />
                 </View>
               );
             })}
@@ -98,54 +107,67 @@ const styles = StyleSheet.create({
   pit: {
     borderRadius: 9999,
     backgroundColor: colors.ebonyDeep,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: colors.outlineVariant,
     overflow: 'hidden',
   },
   inner: {
     flex: 1,
     justifyContent: 'space-between',
-    padding: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.8,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 8 },
+    padding: 8,
+    backgroundColor: colors.ebonyDeep,
+  },
+  innerShadow: {
+    ...StyleSheet.absoluteFillObject,
+    borderWidth: 8,
+    borderColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 999,
+  },
+  gradientOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 999,
+    zIndex: 0,
   },
   seedWrap: {
+    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 6,
+    zIndex: 1,
   },
   more: {
     fontSize: 10,
+    position: 'absolute',
+    bottom: -2,
+    right: 12,
+    zIndex: 2,
   },
   count: {
     ...typography.labelTechnical,
-    alignSelf: 'flex-end',
-    fontSize: 12,
+    alignSelf: 'center',
+    fontSize: 11,
+    opacity: 0.8,
+    zIndex: 2,
   },
   pitSelected: {
     borderColor: colors.tacticalGold,
+    backgroundColor: 'rgba(208, 163, 95, 0.05)',
     shadowColor: colors.tacticalGold,
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 15,
   },
   pitHighlight: {
-    borderColor: colors.tacticalGold,
+    borderColor: 'rgba(208, 163, 95, 0.4)',
     shadowColor: colors.tacticalGold,
-    shadowOpacity: 0.22,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
   pitPressed: {
     opacity: 0.9,
-    transform: [{ scale: 0.98 }],
+    transform: [{ scale: 0.96 }],
   },
   pitDisabled: {
-    opacity: 0.45,
+    opacity: 0.35,
   },
 });

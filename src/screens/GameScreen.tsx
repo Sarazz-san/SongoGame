@@ -12,11 +12,8 @@ import { Text } from '../components/typography/Text';
 import { getSowingPath, isValidMove } from '../modules/gameEngine';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { haptics } from '../shared/haptics';
-
-type RootStackParamList = {
-  Home: undefined;
-  Game: undefined;
-};
+import { audio } from '../shared/audio';
+import { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Game'>;
 
@@ -24,19 +21,18 @@ const playerLabel = (p: 'PLAYER_1' | 'PLAYER_2') => (p === 'PLAYER_1' ? 'Vous' :
 
 export function GameScreen({ navigation }: Props) {
   const { width } = useWindowDimensions();
-  const { engineState, error, playMove, initializeGame, lastMoveIndex, lastLandingIndex, undo, surrender, history } =
-    useGameStore((s) => ({
-    engineState: s.engineState,
-    error: s.error,
-    playMove: s.playMove,
-    initializeGame: s.initializeGame,
-    lastMoveIndex: s.lastMoveIndex,
-    lastLandingIndex: s.lastLandingIndex,
-    undo: s.undo,
-    surrender: s.surrender,
-    history: s.history,
-  }));
-  const { mode, playBotMove } = useGameStore((s) => ({ mode: s.mode, playBotMove: s.playBotMove }));
+  
+  const engineState = useGameStore((s) => s.engineState);
+  const error = useGameStore((s) => s.error);
+  const playMove = useGameStore((s) => s.playMove);
+  const initializeGame = useGameStore((s) => s.initializeGame);
+  const lastMoveIndex = useGameStore((s) => s.lastMoveIndex);
+  const lastLandingIndex = useGameStore((s) => s.lastLandingIndex);
+  const undo = useGameStore((s) => s.undo);
+  const surrender = useGameStore((s) => s.surrender);
+  const history = useGameStore((s) => s.history);
+  const mode = useGameStore((s) => s.mode);
+  const playBotMove = useGameStore((s) => s.playBotMove);
 
   const { board, currentPlayer, scorePlayer1, scorePlayer2, gameStatus } = engineState;
   const highlighted = [lastMoveIndex, lastLandingIndex].filter((v): v is number => typeof v === 'number');
@@ -79,14 +75,14 @@ export function GameScreen({ navigation }: Props) {
       if (handoffVisible) return;
       const validation = isValidMove(engineState, index);
       if (!validation.valid) {
-        haptics.trigger('notificationWarning');
+        audio.playError();
         playMove(index);
         return;
       }
 
       const { path } = getSowingPath(engineState.board, engineState.currentPlayer, index);
       if (path.length === 0) {
-        haptics.trigger('notificationWarning');
+        audio.playError();
         playMove(index);
         return;
       }
@@ -95,6 +91,7 @@ export function GameScreen({ navigation }: Props) {
       setIsAnimating(true);
       let step = 0;
       setAnimatingPit(path[0]);
+      audio.playSowing();
 
       const tick = () => {
         step += 1;
@@ -104,11 +101,15 @@ export function GameScreen({ navigation }: Props) {
           return;
         }
         setAnimatingPit(path[step]);
+        audio.playSowing();
         setTimeout(tick, 60);
       };
 
       // Apply the move immediately; animation is only a visual path-follow.
-      playMove(index);
+      const res = playMove(index);
+      if (res && (res as any).capturedThisMove > 0) {
+        setTimeout(() => audio.playCapture(), path.length * 60 + 100);
+      }
       setTimeout(tick, 60);
     },
     [engineState, handoffVisible, isAnimating, playMove]

@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { Pit } from './Pit';
 
@@ -36,57 +38,76 @@ export function Board({
   const bottomRow = showPlayer2OnTop ? board.slice(0, 7) : board.slice(7, 14);
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.row, { gap }]}>
-        {topRow.map((seeds, i) => {
-          const index = showPlayer2OnTop ? 7 + i : i;
-          const disabled = !isPlayerPit(currentPlayer, index);
-          return (
-            <View key={index} style={styles.cell}>
-              <Pit
-                index={index}
-                seeds={seeds}
-                size={pitSize}
-                disabled={disabled}
-                highlight={isPlayerPit(currentPlayer, index) && (isPitPlayable ? isPitPlayable(index) : seeds > 0)}
-                selected={highlightedIndexes?.includes(index)}
-                onPress={() => onPressPit(index)}
-              />
-            </View>
-          );
-        })}
-      </View>
-      <View style={[styles.row, { gap }]}>
-        {bottomRow.map((seeds, i) => {
-          const index = showPlayer2OnTop ? i : 7 + i;
-          const disabled = !isPlayerPit(currentPlayer, index);
-          return (
-            <View key={index} style={styles.cell}>
-              <Pit
-                index={index}
-                seeds={seeds}
-                size={pitSize}
-                disabled={disabled}
-                highlight={isPlayerPit(currentPlayer, index) && (isPitPlayable ? isPitPlayable(index) : seeds > 0)}
-                selected={highlightedIndexes?.includes(index)}
-                onPress={() => onPressPit(index)}
-              />
-            </View>
-          );
-        })}
-      </View>
+    <View style={styles.boardContainer}>
+      <LinearGradient colors={[colors.mahoganyRich, colors.surfaceContainerHigh]} style={styles.boardInner} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }}>
+        <View style={[styles.row, { gap }]}>
+          {topRow.map((seeds, i) => {
+            const index = showPlayer2OnTop ? 7 + i : i;
+            const disabled = !isPlayerPit(currentPlayer, index);
+            return (
+              <View key={index} style={styles.cell}>
+                <Pit
+                  index={index}
+                  seeds={seeds}
+                  size={pitSize}
+                  disabled={disabled}
+                  highlight={isPlayerPit(currentPlayer, index) && (isPitPlayable ? isPitPlayable(index) : seeds > 0)}
+                  selected={highlightedIndexes?.includes(index)}
+                  onPress={() => onPressPit(index)}
+                />
+              </View>
+            );
+          })}
+        </View>
+        <View style={[styles.row, { gap }]}>
+          {bottomRow.map((seeds, i) => {
+            const index = showPlayer2OnTop ? i : 7 + i;
+            const disabled = !isPlayerPit(currentPlayer, index);
+            return (
+              <View key={index} style={styles.cell}>
+                <Pit
+                  index={index}
+                  seeds={seeds}
+                  size={pitSize}
+                  disabled={disabled}
+                  highlight={isPlayerPit(currentPlayer, index) && (isPitPlayable ? isPitPlayable(index) : seeds > 0)}
+                  selected={highlightedIndexes?.includes(index)}
+                  onPress={() => onPressPit(index)}
+                />
+              </View>
+            );
+          })}
+        </View>
+      </LinearGradient>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  boardContainer: {
     width: '100%',
-    gap: spacing.boardGap,
+    padding: 20,
+    backgroundColor: 'transparent',
+    borderRadius: 32,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+    shadowColor: '#000',
+    shadowOpacity: 0.6,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 10,
+  },
+  boardInner: {
+    padding: 16,
+    borderRadius: 24,
+    gap: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: 'rgba(0,0,0,0.25)',
   },
   row: {
     flexDirection: 'row',
-    width: '100%',
+    justifyContent: 'center',
   },
   cell: {
     flex: 0,

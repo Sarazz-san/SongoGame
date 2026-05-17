@@ -60,20 +60,50 @@ describe('gameEngine (Songo)', () => {
     expect(res.state.board[8]).toBe(0);
   });
 
-  test('>13 seeds: skips start then continues exclusively in opponent from the left', () => {
+  test('Solidarity rule: must feed opponent if they are empty', () => {
     const state = createInitialState();
-    state.board = Array(14).fill(1);
-    state.board[6] = 14;
+    state.board = Array(14).fill(0);
+    // Player 1: 0..6, Player 2: 7..13
+    state.board[0] = 10; // Can feed 7 seeds to opponent (7..13)
+    state.board[1] = 5;  // Can feed 5 seeds to opponent
+
+    // If P2 is empty, P1 must play pit 0 (gives 7) instead of pit 1 (gives 5)
+    const res1 = playMove(state, 1);
+    expect(res1.success).toBe(false);
+    expect(res1.error).toContain('Solidarité');
+
+    const res0 = playMove(state, 0);
+    expect(res0.success).toBe(true);
+    const p2Total = res0.state.board.slice(7, 14).reduce((a, b) => a + b, 0);
+    expect(p2Total).toBe(7);
+  });
+
+  test('Forbidden move: pit 7 with 1 or 2 seeds', () => {
+    const state = createInitialState();
+    state.board = Array(14).fill(5);
+    state.board[6] = 2; // Pit 7 (index 6) for Player 1
 
     const res = playMove(state, 6);
+    expect(res.success).toBe(false);
+    expect(res.error).toContain('Interdit');
+  });
+
+  test('Grand Slam: cannot capture all seeds in opponent territory', () => {
+    const state = createInitialState();
+    state.board = Array(14).fill(0);
+    // Add some seeds in own territory to stay > 10 total
+    state.board[1] = 10;
+    state.board[0] = 2; // Lands on 7 and 8
+    state.board[7] = 2; // Becomes 3
+    state.board[8] = 2; // Becomes 3
+    // Opponent has only pits 7 and 8 with seeds. If we capture them, they are empty.
+    // Total seeds on board = 10 + 0 (from 0) + 3 + 3 = 16 (>= 10)
+
+    const res = playMove(state, 0);
     expect(res.success).toBe(true);
-    // After 13-drop tour: pits 5..0 and 7..13 get +1, start pit remains 0.
-    // Remaining 1 seed goes to opponent from the left => pit 7.
-    expect(res.state.board[6]).toBe(0);
-    expect(res.state.board.slice(0, 6)).toEqual([2, 2, 2, 2, 2, 2]);
-    // Special rule: ending on opponent leftmost after a full tour captures 1 seed.
-    expect(res.state.board[7]).toBe(2);
-    expect(res.state.scorePlayer1).toBe(1);
-    expect(res.state.board[13]).toBe(2);
+    expect(res.capturedThisMove).toBe(0); // Capture cancelled to avoid emptying opponent
+    expect(res.state.scorePlayer1).toBe(0);
+    expect(res.state.board[7]).toBe(3);
+    expect(res.state.board[8]).toBe(3);
   });
 });

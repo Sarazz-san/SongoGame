@@ -1,5 +1,6 @@
-import { Platform } from 'react-native';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { NativeModules, Platform } from 'react-native';
+
+const RNHapticFeedback = NativeModules.RNHapticFeedback;
 
 const options = {
   enableVibrateFallback: true,
@@ -15,33 +16,16 @@ type HapticType =
   | 'notificationWarning'
   | 'notificationError';
 
-const mapType = (type: HapticType) => {
-  // Map to library names
-  switch (type) {
-    case 'selection':
-      return 'selection';
-    case 'impactLight':
-      return 'impactLight';
-    case 'impactMedium':
-      return 'impactMedium';
-    case 'impactHeavy':
-      return 'impactHeavy';
-    case 'notificationSuccess':
-      return 'notificationSuccess';
-    case 'notificationWarning':
-      return 'notificationWarning';
-    case 'notificationError':
-      return 'notificationError';
-  }
-};
-
 export const haptics = {
   trigger(type: HapticType) {
+    if (Platform.OS !== 'ios' && Platform.OS !== 'android') return;
+    if (!RNHapticFeedback) return;
+
     try {
-      if (Platform.OS !== 'ios' && Platform.OS !== 'android') return;
-      ReactNativeHapticFeedback.trigger(mapType(type), options);
+      // Use dynamic import or direct trigger if available
+      RNHapticFeedback.trigger(type, options);
     } catch {
-      // no-op: haptics must never crash the app
+      // no-op
     }
   },
 };

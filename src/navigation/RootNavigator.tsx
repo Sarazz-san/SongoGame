@@ -4,10 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { GameScreen } from '../screens/GameScreen';
 import { TabsNavigator } from './TabsNavigator';
 
-export type RootStackParamList = {
-  Tabs: undefined;
-  Game: undefined;
-};
+import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
