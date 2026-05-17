@@ -27,7 +27,7 @@ const mulberry32 = (a: number) => {
 };
 /* eslint-enable no-bitwise */
 
-export function Pit({ index, seeds, disabled, selected, highlight, onPress }: Props) {
+export function Pit({ index, seeds, size, disabled, selected, highlight, onPress }: Props) {
   const renderedSeeds = Math.min(seeds, 12);
   const extraSeeds = seeds - renderedSeeds;
   const rand = mulberry32(index * 1337 + seeds * 97);
@@ -118,13 +118,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.ebonyDeep,
   },
   innerShadow: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     borderWidth: 8,
     borderColor: 'rgba(0,0,0,0.5)',
     borderRadius: 999,
   },
   gradientOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     borderRadius: 999,
     zIndex: 0,
   },

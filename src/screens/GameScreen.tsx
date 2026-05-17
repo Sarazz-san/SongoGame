@@ -106,8 +106,8 @@ export function GameScreen({ navigation }: Props) {
       };
 
       // Apply the move immediately; animation is only a visual path-follow.
-      const res = playMove(index);
-      if (res && (res as any).capturedThisMove > 0) {
+      const res: any = playMove(index);
+      if ((res?.capturedThisMove ?? 0) > 0) {
         setTimeout(() => audio.playCapture(), path.length * 60 + 100);
       }
       setTimeout(tick, 60);

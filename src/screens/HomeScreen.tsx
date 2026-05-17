@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   heroOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     padding: spacing.gutter,
     gap: 4,

@@ -23,7 +23,7 @@ const cloneState = (state: GameState): GameState => ({
   board: [...state.board],
 });
 
-const playerScoreKey = (player: Player) => (player === 'PLAYER_1' ? 'scorePlayer1' : 'scorePlayer2') as const;
+const playerScoreKey = (player: Player): 'scorePlayer1' | 'scorePlayer2' => (player === 'PLAYER_1' ? 'scorePlayer1' : 'scorePlayer2');
 
 const sowingLoopOrder = (player: Player): number[] => {
   // Rule (clubawale): in your camp: right -> left; in opponent camp: left -> right.
