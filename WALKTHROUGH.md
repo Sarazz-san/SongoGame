@@ -135,13 +135,13 @@ L'objectif final de ce plan est de passer d'un dossier vide à un **APK fonction
 ## Phase 8 : Build & Déploiement (Génération de l'APK)
 *Objectif : Compiler l'application pour Android.*
 
-- [ ] **8.1 Assets Android** : 
+- [x] **8.1 Assets Android** : 
   - Configuration de l'icône de l'application (Android mipmap).
   - Configuration du Splash Screen natif aux couleurs du Songo.
-- [ ] **8.2 Configuration du Keystore** : 
+- [x] **8.2 Configuration du Keystore** : 
   - Génération d'une clé de signature release.
   - Configuration du fichier `android/app/build.gradle`.
-- [ ] **8.3 Génération de l'APK** : 
+- [x] **8.3 Génération de l'APK** : 
   - Lancement de la commande de build (`cd android && ./gradlew assembleRelease` pour RN CLI, ou `eas build -p android --profile production` pour Expo).
   - Test de l'APK généré sur un appareil physique.
 

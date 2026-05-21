@@ -1,4 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
+import { useSettingsStore } from '../store/useSettingsStore';
 
 const RNHapticFeedback = NativeModules.RNHapticFeedback;
 
@@ -20,6 +21,7 @@ export const haptics = {
   trigger(type: HapticType) {
     if (Platform.OS !== 'ios' && Platform.OS !== 'android') return;
     if (!RNHapticFeedback) return;
+    if (!useSettingsStore.getState().hapticsEnabled) return;
 
     try {
       // Use dynamic import or direct trigger if available
@@ -29,4 +31,3 @@ export const haptics = {
     }
   },
 };
-

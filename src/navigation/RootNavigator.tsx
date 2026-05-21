@@ -5,6 +5,7 @@ import { GameScreen } from '../screens/GameScreen';
 import { TabsNavigator } from './TabsNavigator';
 
 import { RootStackParamList } from './types';
+import { SettingsScreen } from '../screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -14,6 +15,7 @@ export const RootNavigator = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Tabs" component={TabsNavigator} />
         <Stack.Screen name="Game" component={GameScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

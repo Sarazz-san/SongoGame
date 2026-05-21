@@ -51,7 +51,7 @@ export function Board({
                   disabled={disabled}
                   highlight={isPlayerPit(currentPlayer, index) && (isPitPlayable ? isPitPlayable(index) : seeds > 0)}
                   selected={highlightedIndexes?.includes(index)}
-                  onPress={() => onPressPit(index)}
+                  onTap={() => onPressPit(index)}
                 />
               </View>
             );
@@ -70,7 +70,7 @@ export function Board({
                   disabled={disabled}
                   highlight={isPlayerPit(currentPlayer, index) && (isPitPlayable ? isPitPlayable(index) : seeds > 0)}
                   selected={highlightedIndexes?.includes(index)}
-                  onPress={() => onPressPit(index)}
+                  onTap={() => onPressPit(index)}
                 />
               </View>
             );

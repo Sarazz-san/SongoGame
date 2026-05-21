@@ -12,7 +12,7 @@ type Props = {
   disabled?: boolean;
   selected?: boolean;
   highlight?: boolean;
-  onPress?: () => void;
+  onTap?: () => void;
 };
 
 /* eslint-disable no-bitwise */
@@ -26,11 +26,14 @@ const mulberry32 = (a: number) => {
 };
 /* eslint-enable no-bitwise */
 
-export function Pit({ index, seeds, size, disabled, selected, highlight, onPress }: Props) {
+export function Pit({ index, seeds, size, disabled, selected, highlight, onTap }: Props) {
   const renderedSeeds = Math.min(seeds, 12);
   const extraSeeds = seeds - renderedSeeds;
   const rand = mulberry32(index * 1337 + seeds * 97);
   const pulse = React.useRef(new Animated.Value(0)).current;
+  const pop = React.useRef(new Animated.Value(0)).current;
+  const longPressedRef = React.useRef(false);
+  const [showBigCount, setShowBigCount] = React.useState(false);
 
   React.useEffect(() => {
     if (!selected) {
@@ -52,13 +55,66 @@ export function Pit({ index, seeds, size, disabled, selected, highlight, onPress
   const scale = selected ? pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 1.05] }) : 1;
   const pitSize = typeof size === 'number' ? size : undefined;
 
+  const showCount = React.useCallback(() => {
+    longPressedRef.current = true;
+    setShowBigCount(true);
+    pop.stopAnimation();
+    pop.setValue(0);
+    Animated.timing(pop, { toValue: 1, duration: 180, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start();
+  }, [pop]);
+
+  const hideCount = React.useCallback(() => {
+    if (!showBigCount) return;
+    Animated.timing(pop, { toValue: 0, duration: 140, easing: Easing.in(Easing.quad), useNativeDriver: true }).start(
+      ({ finished }) => {
+        if (finished) setShowBigCount(false);
+      }
+    );
+  }, [pop, showBigCount]);
+
   return (
-    <Animated.View style={{ transform: [{ scale }] }}>
+    <Animated.View style={[styles.wrapper, { transform: [{ scale }] }]}>
+      {showBigCount ? (
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.bigCountWrap,
+            {
+              opacity: pop,
+              transform: [
+                { translateY: pop.interpolate({ inputRange: [0, 1], outputRange: [10, -12] }) },
+                { scale: pop.interpolate({ inputRange: [0, 1], outputRange: [0.96, 1.08] }) },
+              ],
+            },
+          ]}
+        >
+          <Text variant="header" style={styles.bigCountText} color={colors.tacticalGold}>
+            {seeds}
+          </Text>
+        </Animated.View>
+      ) : null}
+
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={`Pit ${index + 1}`}
         disabled={disabled}
-        onPress={onPress}
+        delayLongPress={260}
+        onLongPress={() => {
+          if (disabled) return;
+          showCount();
+        }}
+        onPress={() => {
+          // Tap = play. Long-press = reveal count (no play).
+          if (disabled) return;
+          if (longPressedRef.current) {
+            longPressedRef.current = false;
+            return;
+          }
+          onTap?.();
+        }}
+        onPressOut={() => {
+          hideCount();
+        }}
         style={({ pressed }) => [
           styles.pit,
           pitSize ? { width: pitSize, height: pitSize } : null,
@@ -89,7 +145,7 @@ export function Pit({ index, seeds, size, disabled, selected, highlight, onPress
               </Text>
             ) : null}
           </View>
-          <Text variant="tech" color={colors.tacticalGold} style={styles.count}>
+          <Text variant="tech" color={colors.tacticalGold} style={styles.countSmall}>
             {seeds}
           </Text>
         </View>
@@ -99,6 +155,10 @@ export function Pit({ index, seeds, size, disabled, selected, highlight, onPress
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   pit: {
     borderRadius: 9999,
     backgroundColor: colors.ebonyDeep,
@@ -138,12 +198,29 @@ const styles = StyleSheet.create({
     right: 12,
     zIndex: 2,
   },
-  count: {
+  countSmall: {
     ...typography.labelTechnical,
-    alignSelf: 'center',
-    fontSize: 11,
-    opacity: 0.8,
+    position: 'absolute',
+    top: 8,
+    right: 10,
+    fontSize: 12,
+    opacity: 0.9,
     zIndex: 2,
+  },
+  bigCountWrap: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: -22,
+    alignItems: 'center',
+    zIndex: 3,
+  },
+  bigCountText: {
+    letterSpacing: 0,
+    fontSize: 22,
+    textShadowColor: 'rgba(0,0,0,0.7)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
   },
   pitSelected: {
     borderColor: colors.tacticalGold,

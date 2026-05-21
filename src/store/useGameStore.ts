@@ -6,29 +6,47 @@ export type Player = 'PLAYER_1' | 'PLAYER_2';
 
 export interface GameState {
   mode: 'SOLO' | 'LOCAL';
+  timeControlMinutes: number;
+  turnThinkingMinutes: number;
+  handoffAlreadyShown: boolean;
+  matchId: string;
+  winner: 'PLAYER_1' | 'PLAYER_2' | 'DRAW' | null;
   engineState: EngineGameState;
   error?: string;
   lastMoveIndex?: number;
   lastLandingIndex?: number;
   history: EngineGameState[];
-  initializeGame: (mode?: 'SOLO' | 'LOCAL') => void;
-  playMove: (startIndex: number) => void;
+  initializeGame: (mode?: 'SOLO' | 'LOCAL', config?: { timeControlMinutes?: number; turnThinkingMinutes?: number }) => void;
+  playMove: (startIndex: number) => { success: boolean; capturedThisMove?: number; lastLandingIndex?: number };
   playBotMove: () => void;
   undo: () => void;
   surrender: () => void;
+  markHandoffShown: () => void;
+  forfeitTurn: () => void;
+  endMatchOnTime: () => void;
 }
 
-export const useGameStore = create<GameState>((set) => ({
+export const useGameStore = create<GameState>((set, get) => ({
   mode: 'LOCAL',
+  timeControlMinutes: 30,
+  turnThinkingMinutes: 3,
+  handoffAlreadyShown: false,
+  matchId: '#0000-X',
+  winner: null,
   engineState: createInitialState(),
   error: undefined,
   lastMoveIndex: undefined,
   lastLandingIndex: undefined,
   history: [],
 
-  initializeGame: (mode = 'LOCAL') =>
+  initializeGame: (mode = 'LOCAL', config) =>
     set({
       mode,
+      timeControlMinutes: config?.timeControlMinutes ?? 30,
+      turnThinkingMinutes: config?.turnThinkingMinutes ?? 3,
+      handoffAlreadyShown: false,
+      matchId: `#${Math.floor(1000 + Math.random() * 9000)}-${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
+      winner: null,
       engineState: createInitialState(),
       error: undefined,
       lastMoveIndex: undefined,
@@ -36,19 +54,33 @@ export const useGameStore = create<GameState>((set) => ({
       history: [],
     }),
 
-  playMove: (startIndex: number) =>
-    set((current) => {
-      const result = enginePlayMove(current.engineState, startIndex);
-      if (!result.success) return { ...current, error: result.error ?? 'Coup invalide.' };
-      return {
-        ...current,
-        history: [...current.history, current.engineState],
-        engineState: result.state,
-        error: undefined,
-        lastMoveIndex: startIndex,
-        lastLandingIndex: result.lastLandingIndex,
-      };
-    }),
+  playMove: (startIndex: number) => {
+    const current = get();
+    const result = enginePlayMove(current.engineState, startIndex);
+    if (!result.success) {
+      set({ error: result.error ?? 'Coup invalide.' });
+      return { success: false };
+    }
+
+    const nextWinner =
+      result.state.gameStatus !== 'PLAYING'
+        ? result.state.scorePlayer1 === result.state.scorePlayer2
+          ? 'DRAW'
+          : result.state.scorePlayer1 > result.state.scorePlayer2
+            ? 'PLAYER_1'
+            : 'PLAYER_2'
+        : current.winner;
+
+    set({
+      history: [...current.history, current.engineState],
+      engineState: result.state,
+      error: undefined,
+      lastMoveIndex: startIndex,
+      lastLandingIndex: result.lastLandingIndex,
+      winner: nextWinner ?? null,
+    });
+    return { success: true, capturedThisMove: result.capturedThisMove, lastLandingIndex: result.lastLandingIndex };
+  },
 
   playBotMove: () =>
     set((current) => {
@@ -89,11 +121,39 @@ export const useGameStore = create<GameState>((set) => ({
     set((current) => {
       const state = current.engineState;
       if (state.gameStatus !== 'PLAYING') return current;
+      const winner = state.currentPlayer === 'PLAYER_1' ? 'PLAYER_2' : 'PLAYER_1';
       const next: EngineGameState = {
         ...state,
         gameStatus: 'FINISHED',
-        // Winner tracking UI will come later; for now we freeze the game.
       };
-      return { ...current, engineState: next, error: undefined };
+      return { ...current, engineState: next, winner, error: undefined };
+    }),
+
+  markHandoffShown: () => set({ handoffAlreadyShown: true }),
+
+  forfeitTurn: () =>
+    set((current) => {
+      const state = current.engineState;
+      if (state.gameStatus !== 'PLAYING') return current;
+      const nextPlayer = state.currentPlayer === 'PLAYER_1' ? 'PLAYER_2' : 'PLAYER_1';
+      const next: EngineGameState = { ...state, currentPlayer: nextPlayer };
+      return {
+        ...current,
+        history: [...current.history, current.engineState],
+        engineState: next,
+        error: undefined,
+        lastMoveIndex: undefined,
+        lastLandingIndex: undefined,
+      };
+    }),
+
+  endMatchOnTime: () =>
+    set((current) => {
+      const state = current.engineState;
+      if (state.gameStatus !== 'PLAYING') return current;
+      const winner =
+        state.scorePlayer1 === state.scorePlayer2 ? 'DRAW' : state.scorePlayer1 > state.scorePlayer2 ? 'PLAYER_1' : 'PLAYER_2';
+      const next: EngineGameState = { ...state, gameStatus: winner === 'DRAW' ? 'DRAW' : 'FINISHED' };
+      return { ...current, engineState: next, winner, error: undefined };
     }),
 }));
